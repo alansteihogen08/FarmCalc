@@ -2,23 +2,162 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Controle Farmacêutico</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmCalc | Monitorização Terapêutica de Fármacos</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #f4f4f4; }
-        .container { background: white; padding: 20px; border-radius: 10px; shadow: 0 0 10px rgba(0,0,0,0.1); display: inline-block; }
-        h1 { color: #2c3e50; }
-        .btn { display: block; width: 250px; margin: 10px auto; padding: 15px; background: #27ae60; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
-        .btn:hover { background: #2ecc71; }
+        :root {
+            --hospital-blue: #2c3e50;
+            --clinical-grey: #ecf0f1;
+            --border-color: #d1d8e0;
+            --text-main: #2f3640;
+            --accent-science: #3498db;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            background: var(--clinical-grey); 
+            color: var(--text-main); 
+        }
+
+        header { 
+            background: var(--hospital-blue); 
+            color: white; 
+            padding: 2.5rem 1rem; 
+            text-align: center;
+            border-bottom: 4px solid var(--accent-science);
+        }
+
+        .container { 
+            max-width: 900px; 
+            margin: -30px auto 40px; 
+            padding: 30px; 
+            background: white; 
+            border-radius: 4px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        }
+
+        .academic-header {
+            border-bottom: 2px solid var(--clinical-grey);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+        }
+
+        .rational-box {
+            background: #f9f9f9;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        .grid-tools { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 25px; 
+            margin-top: 30px; 
+        }
+
+        .card { 
+            border: 1px solid var(--border-color); 
+            padding: 25px; 
+            border-radius: 4px; 
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .card:hover { 
+            border-color: var(--accent-science);
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.2);
+        }
+
+        .target-tag {
+            display: inline-block;
+            background: var(--accent-science);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .btn { 
+            display: block; 
+            padding: 12px; 
+            background: var(--hospital-blue); 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            margin-top: 15px; 
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .btn:hover { background: var(--accent-science); }
+
+        .references {
+            margin-top: 40px;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Minhas Ferramentas Clínicas</h1>
-        <p>Selecione a calculadora desejada:</p>
-        
-        <a href="amicacina.html" class="btn">Calculadora de Amicacina</a>
-        <a href="meropenem.html" class="btn">Gestão de Meropenem</a>
-        
+
+<header>
+    <h1>FarmCalc: Medicina de Precisão</h1>
+    <p>Suporte à Decisão Farmacocinética e Farmacodinâmica (PK/PD)</p>
+</header>
+
+<div class="container">
+    <div class="academic-header">
+        <h2>Racional Clínico</h2>
+        <p>A otimização da terapia antimicrobiana é um pilar fundamental do <i>Antimicrobial Stewardship</i>. O objetivo é garantir a máxima eficácia bactericida enquanto se minimiza a pressão seletiva e a toxicidade sistêmica.</p>
     </div>
+
+    <div class="rational-box">
+        <strong>Conceitos Chave (TDM):</strong>
+        <p>Conforme discutido na literatura atual (MDPI Antibiotics, 2025), a variabilidade farmacocinética em pacientes críticos exige uma abordagem individualizada:</p>
+        <ul>
+            <li><strong>Amicacina:</strong> Antibiótico concentração-dependente. O alvo principal é a relação $C_{max}/MIC \geq 8-10$ para garantir a erradicação bacteriana.</li>
+            <li><strong>Meropenem:</strong> Antibiótico tempo-dependente. O alvo é manter a concentração da fração livre acima da MIC ($fT > MIC$) por pelo menos 40-100% do intervalo de dose.</li>
+        </ul>
+    </div>
+
+    <div class="grid-tools">
+        <!-- Card Amicacina -->
+        <div class="card">
+            <span class="target-tag">Cmax/MIC Target</span>
+            <h3>Amicacina</h3>
+            <p>Cálculo de constantes de eliminação ($k_e$), meia-vida ($t_{1/2}$) e ajuste de pico/vale.</p>
+            <a href="amicacina.html" class="btn">Abrir Calculadora</a>
+        </div>
+
+        <!-- Card Meropenem -->
+        <div class="card">
+            <span class="target-tag">fT > MIC Target</span>
+            <h3>Meropenem</h3>
+            <p>Avaliação de consumo (DDD/DOT) e suporte ao escalonamento de dose em patógenos MDR.</p>
+            <a href="meropenem.html" class="btn">Abrir Ferramenta</a>
+        </div>
+    </div>
+
+    <div class="references">
+        <strong>Fontes Acadêmicas:</strong><br>
+        1. Precision Dosing of Aminoglycosides and Carbapenems. <i>Antibiotics</i> 2025, 14(1). doi:10.3390/antibiotics14010092<br>
+        2. Guia de Stewardship de Antimicrobianos - HFSE / Rio de Janeiro.
+    </div>
+</div>
+
+<footer>
+    <p style="text-align: center; color: #95a5a6; font-size: 0.8rem; padding-bottom: 20px;">
+        Uso restrito profissional. Desenvolvido para suporte à assistência farmacêutica hospitalar.
+    </p>
+</footer>
+
 </body>
 </html>
