@@ -7,24 +7,18 @@
     <style>
         :root {
             --primary: #1e3a5f; /* Azul Marinho Clínico */
+            --secondary: #f4f7f9; /* Cinza claro para o fundo */
             --accent: #2980b9;
             --text-dark: #2c3e50;
             --white: #ffffff;
             --stewardship-green: #27ae60;
-            /* Cor de fundo para o container com transparência */
-            --bg-panel: rgba(255, 255, 255, 0.9); 
         }
         
         body { 
             font-family: 'Segoe UI', Helvetica, Arial, sans-serif; 
             margin: 0; 
             color: var(--text-dark);
-            /* Define a imagem como fundo de todo o site */
-            background-image: url('https://i.ibb.co/Lp0F0nJ/image-2.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed; /* O fundo não rola junto com a página */
-            background-repeat: no-repeat;
+            background-color: var(--secondary); /* Fundo limpo e neutro */
         }
 
         header { 
@@ -41,14 +35,10 @@
         .container { 
             max-width: 1000px; 
             margin: -50px auto 50px; 
-            background: var(--bg-panel); /* Fundo branco translúcido */
+            background: var(--white); 
             padding: 40px; 
             border-radius: 12px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            /* Efeito de desfoque sutil no fundo (Glassmorphism) */
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Sombra suave para destacar do fundo */
         }
 
         .stewardship-banner {
@@ -62,7 +52,6 @@
             justify-content: center;
             color: white;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .stewardship-banner h2 { font-size: 1.8rem; margin: 0; font-weight: 600; }
@@ -84,18 +73,19 @@
         }
 
         .info-card {
-            background: rgba(248, 250, 252, 0.8);
+            background: #f8fafc;
             border: 1px solid #e2e8f0;
             padding: 20px; 
             border-radius: 8px; 
             font-size: 0.9rem;
             transition: 0.3s;
+            line-height: 1.6; /* Melhorar legibilidade nas explicações */
         }
         
-        .info-card:hover { background: var(--white); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .info-card:hover { background: #f1f5f9; }
 
         .brcast-box {
-            background: rgba(255, 249, 230, 0.9);
+            background: #fff9e6;
             border: 1px solid #ffeaa7;
             padding: 15px; 
             border-radius: 8px; 
@@ -119,13 +109,12 @@
             border-radius: 10px;
             text-align: center; 
             transition: 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .tool-card:hover { 
             border-color: var(--stewardship-green); 
             transform: translateY(-5px); 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
         .btn {
@@ -147,7 +136,7 @@
             color: #636e72; 
             margin-top: 50px; 
             line-height: 1.6;
-            background: rgba(248, 250, 252, 0.7);
+            background: #f8fafc;
             padding: 20px;
             border-radius: 8px;
         }
@@ -169,6 +158,9 @@
             font-size: 0.85rem; 
             padding: 20px 0 40px;
         }
+
+        /* Classe utilitária para formatação PK/PD */
+        .pkpd { font-family: "Times New Roman", Times, serif; font-style: italic; }
     </style>
 </head>
 <body>
@@ -190,11 +182,11 @@
     <div class="rational-grid">
         <div class="info-card">
             <strong>Aminoglicosídeos (Amicacina)</strong><br>
-            Ajuste individualizado baseado no Volume de Distribuição (Vd) e Clearance renal, otimizando a relação $C_{max}/MIC$ para eficácia concentração-dependente.
+            Ajuste individualizado baseado no Volume de Distribuição (Vd) e Clearance renal, otimizando a relação <span class="pkpd">C<sub>max</sub></span>/<span class="pkpd">MIC</span> para eficácia concentração-dependente.
         </div>
         <div class="info-card">
             <strong>Beta-lactâmicos (Meropenem)</strong><br>
-            Foco no tempo de exposição da fração livre ($fT > MIC$), essencial para patógenos tempo-dependentes com perfis de sensibilidade desafiadores.
+            Foco no tempo de exposição da fração livre (<span class="pkpd">f</span>T &gt; <span class="pkpd">MIC</span>), essencial para patógenos tempo-dependentes com perfis de sensibilidade desafiadores.
         </div>
     </div>
 
@@ -237,4 +229,12 @@
 </footer>
 
 </body>
+    
+<!-- Correção MathJax: Se você QUISER usar LaTeX no futuro, 
+     descomente a linha abaixo. Caso contrário, mantenha como está. -->
+<!-- 
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+-->
+
 </html>
