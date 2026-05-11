@@ -1,160 +1,286 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<link rel="manifest" href="../manifest.json">
-<meta name="theme-color" content="#0A7EA4">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora PK/PD — Vancomicina</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<style>
-/* Estilos replicados da sua calculadora padrão */
-.back-link{display:inline-flex;align-items:center;font-family:var(--font,Syne,sans-serif);font-size:11px;font-weight:700;color:var(--accent,#0A7EA4);text-decoration:none;padding:4px 0;opacity:.75;transition:opacity .2s;margin-bottom:.4rem;}.back-link:hover{opacity:1;}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmCalc - Vancomicina Precision</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #c41212; /* Vermelho Flamengo */
+            --secondary: #2c3e50;
+            --accent: #f1c40f;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333;
+        }
 
-:root{
-  --bg:#F0F4F8;
-  --surface:#FFFFFF;
-  --surface2:#F7FAFC;
-  --border:#D9E2EC;
-  --border2:#BCCCDC;
-  --accent:#0A7EA4;
-  --accent2:#1A6B4A;
-  --warn:#B45309;
-  --danger:#C0392B;
-  --ok:#1A6B4A;
-  --text:#1A202C;
-  --muted:#627D98;
-  --font:'Syne',sans-serif;
-  --mono:'JetBrains Mono',monospace;
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
 
-body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;padding:1.5rem 1rem 3rem;}
-.header{max-width:980px;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;}
-.header-left h1{font-size:clamp(16px,2.5vw,22px);font-weight:800;letter-spacing:-0.02em;color:var(--accent);}
-.header-left p{font-size:11px;color:var(--muted);margin-top:2px;font-weight:400;letter-spacing:0.04em;}
-.header-author{font-size:11px;color:var(--muted);margin-top:3px;font-weight:600;letter-spacing:0.04em;}
-.header-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.status-pill{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:var(--surface2);color:var(--muted);transition:all .3s;}
-.status-pill.ok{background:#E6F4EE;border-color:#A8D9C0;color:var(--ok);}
-.status-pill.warn{background:#FEF3C7;border-color:#FCD34D;color:var(--warn);}
-.status-pill.danger{background:#FAEAEA;border-color:#E8AAAA;color:var(--danger);}
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
 
-.btn-pdf{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;padding:6px 14px;border-radius:20px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;transition:opacity .2s;}
-.wrap{max-width:980px;margin:0 auto;display:grid;grid-template-columns:290px 1fr;gap:1.25rem;align-items:start;}
-@media(max-width:680px){.wrap{grid-template-columns:1fr;}}
+        header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
 
-.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1.25rem;}
-.panel-head{padding:.65rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--surface2);}
-.panel-head-dot{width:7px;height:7px;border-radius:50%;}
-.panel-head h2{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
-.panel-body{padding:1rem;}
+        h1 { color: var(--primary); margin: 0; font-size: 24px; }
+        p.subtitle { color: var(--secondary); font-size: 14px; margin: 5px 0; }
 
-label{display:block;font-size:10px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
-input,select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:13px;padding:7px 10px;outline:none;transition:border-color .2s;}
-input:focus,select:focus{border-color:var(--accent);}
-.form-row{margin-bottom:.8rem;}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;}
-.btn-calc{width:100%;margin-top:.4rem;padding:9px;border:none;border-radius:7px;background:var(--accent);color:#fff;font-family:var(--font);font-size:12px;font-weight:700;letter-spacing:0.06em;cursor:pointer;}
-.btn-reset{width:100%;margin-top:.4rem;padding:7px;border:1px solid var(--border2);border-radius:7px;background:transparent;color:var(--muted);font-family:var(--font);font-size:11px;font-weight:600;cursor:pointer;}
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            background: #fdfdfd;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
 
-.metric-grid{display:grid;gap:.65rem;padding:1rem;}
-.metric-grid-3{grid-template-columns:repeat(3,1fr);}
-.metric-grid-2{grid-template-columns:repeat(2,1fr);}
-.metric{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.7rem .85rem;}
-.metric-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
-.metric-value{font-family:var(--mono);font-size:17px;font-weight:500;color:var(--text);}
-.metric-value small{font-size:10px;color:var(--muted);margin-left:2px;}
-.metric.c-accent .metric-value{color:var(--accent);}
-.metric.c-green .metric-value{color:var(--ok);}
-.metric.c-warn .metric-value{color:var(--warn);}
+        .input-group { display: flex; flex-direction: column; }
+        label { font-weight: bold; font-size: 13px; margin-bottom: 5px; color: var(--secondary); }
+        input, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 15px;
+        }
 
-.result-box{margin:0 1rem 1rem;padding:.9rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--surface2);}
-.result-box.ok{border-color:#A8D9C0;background:#E6F4EE;}
-.result-box.warn{border-color:#FCD34D;background:#FEF3C7;}
-.result-box.danger{border-color:#E8AAAA;background:#FAEAEA;}
-.result-title{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;color:var(--muted);}
-.result-title.ok{color:var(--ok);}
-.result-title.warn{color:var(--warn);}
-.result-title.danger{color:var(--danger);}
-.result-body{font-size:13px;line-height:1.6;color:var(--text);}
-.section-label{padding:.55rem 1rem .25rem;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--border);}
-.detail-toggle{margin:0 1rem 1rem;padding:7px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);font-size:10px;font-weight:700;letter-spacing:0.08em;cursor:pointer;width:calc(100% - 2rem);}
-.detail-table{display:none;margin:0 1rem 1rem;}
-.detail-table.open{display:block;}
-table.det{width:100%;border-collapse:collapse;font-size:12px;}
-table.det td{padding:6px 10px;border-bottom:1px solid var(--border);}
-table.det td:first-child{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;width:55%;}
-</style>
+        .results-panel {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 25px;
+        }
+
+        .dose-card {
+            background: linear-gradient(135deg, var(--primary), #8b0000);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .dose-value { font-size: 32px; font-weight: bold; margin: 10px 0; }
+        .auc-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: #f1f3f5;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .stat-item span { display: block; font-weight: bold; font-size: 16px; color: var(--primary); }
+
+        .chart-container {
+            margin-top: 30px;
+            height: 300px;
+            position: relative;
+        }
+
+        .footer-notes {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .btn-calc {
+            grid-column: 1 / -1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-calc:hover { background: #a00; }
+    </style>
 </head>
 <body>
 
-<a class="back-link" href="../index.html">← PharmaCalc</a>
-<div class="header">
-  <div class="header-left">
-    <h1>Calculadora PK/PD — Vancomicina</h1>
-    <div class="header-author">Desenvolvido por Alan Steihogen</div>
-  </div>
-  <div class="header-right">
-    <div id="status-pill" class="status-pill">Aguardando dados</div>
-    <button class="btn-pdf">Gerar PDF</button>
-  </div>
+<div class="container">
+    <header>
+        <h1>FarmCalc - Vancomicina (Modelo AUC Variável)</h1>
+        <p class="subtitle">Apoio à Decisão Clínica baseada em Matzke & PK/PD</p>
+    </header>
+
+    <div class="grid-inputs">
+        <div class="input-group">
+            <label>Sexo</label>
+            <select id="sexo">
+                <option value="M">Masculino</option>
+                <option value="F">Feminino</option>
+            </select>
+        </div>
+        <div class="input-group">
+            <label>Idade (anos)</label>
+            <input type="number" id="idade" value="40">
+        </div>
+        <div class="input-group">
+            <label>Peso Real (kg)</label>
+            <input type="number" id="peso" value="91">
+        </div>
+        <div class="input-group">
+            <label>Creatinina (mg/dL)</label>
+            <input type="number" id="creatinina" step="0.1" value="1.5">
+        </div>
+        <button class="btn-calc" onclick="calcular()">CALCULAR DOSE PRECISA</button>
+    </div>
+
+    <div class="results-panel">
+        <div>
+            <div class="dose-card">
+                <div>Dose de Manutenção</div>
+                <div class="dose-value" id="res_dose">--</div>
+                <div class="auc-badge" id="res_auc_box">AUC Est: <span id="res_auc">--</span></div>
+                <div style="margin-top:10px; font-size: 13px;">Dose de Ataque (25mg/kg): <strong id="res_ataque">--</strong></div>
+            </div>
+            
+            <div class="stats-grid" style="margin-top: 20px;">
+                <div class="stat-item">ClCr Est. <span><span id="res_clcr">--</span> <small>mL/min</small></span></div>
+                <div class="stat-item">ClVanco <span><span id="res_clv">--</span> <small>L/h</small></span></div>
+                <div class="stat-item">Vd Total <span><span id="res_vd">--</span> <small>L</small></span></div>
+                <div class="stat-item">Meia-vida <span><span id="res_t12">--</span> <small>h</small></span></div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="decayChart"></canvas>
+        </div>
+    </div>
+
+    <div class="footer-notes">
+        <strong>Notas bibliográficas:</strong><br>
+        1. ClCr: Cockcroft-Gault (1976). | 2. ClVanco: Coeficiente de Matzke (0,06). | 3. Vd: 0,7 L/kg.<br>
+        4. Alvo AUC24/MIC: 400 - 600 (assumindo MIC = 1). Arredondamentos para múltiplos de 250mg.
+    </div>
 </div>
 
-<div class="wrap">
-  <div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-head-dot" style="background:var(--accent)"></div>
-        <h2>Dados do Paciente</h2>
-      </div>
-      <div class="panel-body">
-        <div class="form-grid">
-          <div class="form-row"><label>Sexo</label>
-            <select id="sexo" onchange="calcular()">
-              <option value="">—</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-            </select>
-          </div>
-          <div class="form-row"><label>Idade (anos)</label>
-            <input type="number" id="idade" oninput="calcular()">
-          </div>
-        </div>
-        <div class="form-grid">
-          <div class="form-row"><label>Peso Real (kg)</label>
-            <input type="number" id="peso" oninput="calcular()">
-          </div>
-          <div class="form-row"><label>Creatinina (mg/dL)</label>
-            <input type="number" step="0.01" id="creat" oninput="calcular()">
-          </div>
-        </div>
-        <div class="form-row">
-            <label>Alvo AUC Desejado</label>
-            <select id="alvo-auc" onchange="calcular()">
-              <option value="400" selected>400 (Segurança Renal)</option>
-              <option value="500">500 (Intermediário)</option>
-              <option value="600">600 (Eficácia Máxima)</option>
-            </select>
-        </div>
-        <div class="form-row">
-            <label>Intervalo sugerido (h)</label>
-            <select id="intervalo" onchange="calcular()">
-              <option value="8">8 h</option>
-              <option value="12" selected>12 h</option>
-              <option value="24">24 h</option>
-              <option value="48">48 h</option>
-            </select>
-        </div>
-        <button class="btn-calc" onclick="calcular()">▶ Calcular Dose</button>
-        <button class="btn-reset" onclick="location.reload()">↺ Limpar</button>
-      </div>
-    </div>
-  </div>
+<script>
+let myChart;
 
-  <div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-head-dot" style="background:var
+function calcular() {
+    const sexo = document.getElementById('sexo').value;
+    const idade = parseFloat(document.getElementById('idade').value);
+    const peso = parseFloat(document.getElementById('peso').value);
+    const creat = parseFloat(document.getElementById('creatinina').value);
+
+    // 1. ClCr Cockcroft-Gault
+    let clcr = ((140 - idade) * peso) / (72 * creat);
+    if (sexo === 'F') clcr *= 0.85;
+
+    // 2. PK Base
+    const vd = peso * 0.7;
+    const clv = clcr * 0.06;
+    const ke = clv / vd;
+    const t12 = 0.693 / ke;
+
+    // 3. Tau Automático
+    let tau = 12;
+    if (clcr >= 90) tau = 12;
+    else if (clcr >= 50) tau = 12;
+    else if (clcr >= 25) tau = 24;
+    else tau = 48;
+
+    // 4. Dose Alvo AUC 500
+    const doseDiariaTeorica = 500 * clv;
+    const doseTomadaTeorica = doseDiariaTeorica / (24 / tau);
+    const dosePratica = Math.round(doseTomadaTeorica / 250) * 250;
+    const doseDiariaReal = dosePratica * (24 / tau);
+    const aucReal = doseDiariaReal / clv;
+
+    // 5. Ataque
+    const doseAtaque = Math.min(3000, Math.round((25 * peso) / 250) * 250);
+
+    // Update UI
+    document.getElementById('res_clcr').innerText = clcr.toFixed(1);
+    document.getElementById('res_clv').innerText = clv.toFixed(2);
+    document.getElementById('res_vd').innerText = vd.toFixed(1);
+    document.getElementById('res_t12').innerText = t12.toFixed(1);
+    document.getElementById('res_dose').innerText = `${dosePratica}mg de ${tau}/${tau}h`;
+    document.getElementById('res_auc').innerText = aucReal.toFixed(0);
+    document.getElementById('res_ataque').innerText = `${doseAtaque}mg`;
+
+    // Visual Feedback
+    const aucBox = document.getElementById('res_auc_box');
+    aucBox.style.background = (aucReal >= 400 && aucReal <= 600) ? 'rgba(0,255,0,0.3)' : 'rgba(255,0,0,0.4)';
+
+    renderChart(dosePratica, vd, ke, tau);
+}
+
+function renderChart(dose, vd, ke, tau) {
+    const ctx = document.getElementById('decayChart').getContext('2d');
+    const cmax = dose / vd;
+    const labels = [];
+    const data = [];
+
+    for (let t = 0; t <= tau; t += 0.5) {
+        labels.push(t + 'h');
+        data.push((cmax * Math.exp(-ke * t)).toFixed(2));
+    }
+
+    if (myChart) myChart.destroy();
+
+    myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Concentração (mcg/mL)',
+                data: data,
+                borderColor: '#c41212',
+                backgroundColor: 'rgba(196, 18, 18, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'mcg/mL' } }
+            }
+        }
+    });
+}
+
+// Inicializar
+calcular();
+</script>
+
+</body>
+</html>
